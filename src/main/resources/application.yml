@@ -1,0 +1,6 @@
+spring:
+    datasource:
+        url: jdbc:postgresql://181.94.220.137:5433/test
+        username: libertya
+        password: libertya
+        driver-class-name: org.postgresql.Driver
