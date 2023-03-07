@@ -4,11 +4,13 @@ import com.leketo.dynamicreportback.sales.model.Root;
 import com.leketo.dynamicreportback.sales.model.Sales;
 import com.leketo.dynamicreportback.sales.model.SubRow;
 import com.leketo.dynamicreportback.sales.repository.SalesRepository;
+import com.leketo.dynamicreportback.util.NumberFormat;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -19,8 +21,8 @@ public class SalesService {
 
     private final SalesRepository repository;
 
-    public List<Root> getAll2(){
-        List<Sales> sales = repository.getAll();
+    public List<Root> findByDate(Date from, Date to){
+        List<Sales> sales = repository.findByDate(from, to);
         List<Root> roots  = new ArrayList<>();
         Map<String, List<Sales>> salesPerVendedor = sales.stream()
                 .collect(Collectors.groupingBy(Sales::getVendedor));
@@ -35,11 +37,9 @@ public class SalesService {
 
             List<BigDecimal> subTotals = salesBySeller.stream().map(Sales::getSubTotal).collect(Collectors.toList());
             BigDecimal subTotal = subTotals.stream().reduce(BigDecimal.ZERO, BigDecimal::add);
-            root.setSubTotal(subTotal);
+            root.setSubTotal(NumberFormat.separarMiles(subTotal));
 
-            List<BigDecimal> targets = salesBySeller.stream().map(Sales::getObjetivoDelVendedor).collect(Collectors.toList());
-            BigDecimal target = targets.stream().reduce(BigDecimal.ZERO, BigDecimal::add);
-            root.setTarget(target);
+             root.setTarget(NumberFormat.separarMiles(repository.getObjetivoVendedor(sellers.getKey())));
 
             Map<String, List<Sales>> family = salesBySeller.stream()
                     .collect(Collectors.groupingBy(Sales::getFamilia));
@@ -55,7 +55,7 @@ public class SalesService {
 
                 List<BigDecimal> targetsFamilia = familes.stream().map(Sales::getSubTotal).collect(Collectors.toList());
                 BigDecimal targetFamilia = targetsFamilia.stream().reduce(BigDecimal.ZERO, BigDecimal::add);
-                subRowAux.setSubTotal(targetFamilia);
+                subRowAux.setSubTotal(NumberFormat.separarMiles(targetFamilia));
 
                 Map<String, List<Sales>> subfamily = familes.stream()
                         .collect(Collectors.groupingBy(Sales::getSubFamilia));
@@ -68,7 +68,7 @@ public class SalesService {
                     List<BigDecimal> subTotalsSubFamilia = subFamilia.stream().map(Sales::getSubTotal).collect(Collectors.toList());
                     BigDecimal subTotalSubFamilia = subTotalsSubFamilia.stream().reduce(BigDecimal.ZERO, BigDecimal::add);
 
-                    subFamilyRow.setSubTotal(subTotalSubFamilia);
+                    subFamilyRow.setSubTotal(NumberFormat.separarMiles(subTotalSubFamilia));
                     secondRows.add(subFamilyRow);
 
                 }

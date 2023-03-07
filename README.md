@@ -1,4 +1,4 @@
-Tecnoogias utilizadas
+Tecnologias utilizadas
 
 1- Spring
 2- Postgres

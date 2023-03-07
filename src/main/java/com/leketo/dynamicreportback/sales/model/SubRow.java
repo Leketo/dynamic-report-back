@@ -8,7 +8,7 @@ import java.util.List;
 @Setter
 public class SubRow{
     public String name;
-    public BigDecimal subTotal;
-    public BigDecimal target;
+    public String subTotal;
+    public String target;
     public List<SubRow> subRows;
 }

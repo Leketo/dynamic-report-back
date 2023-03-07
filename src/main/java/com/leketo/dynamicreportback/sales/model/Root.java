@@ -9,7 +9,7 @@ import java.util.List;
 public class Root{
     public int id;
     public String name;
-    public BigDecimal subTotal;
-    public BigDecimal target;
+    public String subTotal;
+    public String target;
     public List<SubRow> subRows;
 }
