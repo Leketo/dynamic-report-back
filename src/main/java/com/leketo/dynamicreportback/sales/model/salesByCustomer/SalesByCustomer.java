@@ -1,18 +1,15 @@
-package com.leketo.dynamicreportback.sales.model;
+package com.leketo.dynamicreportback.sales.model.salesByCustomer;
 
 import lombok.Setter;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Setter
-public class Root{
+public class SalesByCustomer {
     public int id;
     public String name;
     public String subTotal;
-    public String target;
-    public String percent;
-    public List<SubRow> subRows;
+    public List<SubSalesByCustomer> subRows;
 
     public int getId() {
         return id;
@@ -38,27 +35,11 @@ public class Root{
         this.subTotal = subTotal;
     }
 
-    public String getTarget() {
-        return target;
-    }
-
-    public void setTarget(String target) {
-        this.target = target;
-    }
-
-    public String getPercent() {
-        return percent;
-    }
-
-    public void setPercent(String percent) {
-        this.percent = percent;
-    }
-
-    public List<SubRow> getSubRows() {
+    public List<SubSalesByCustomer> getSubRows() {
         return subRows;
     }
 
-    public void setSubRows(List<SubRow> subRows) {
+    public void setSubRows(List<SubSalesByCustomer> subRows) {
         this.subRows = subRows;
     }
 }

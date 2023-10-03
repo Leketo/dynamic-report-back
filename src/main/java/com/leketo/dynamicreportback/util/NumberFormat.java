@@ -3,12 +3,21 @@ package com.leketo.dynamicreportback.util;
 /*import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.RuleBasedNumberFormat;*/
 
+import com.leketo.dynamicreportback.sales.model.Root;
+import com.leketo.dynamicreportback.sales.model.Sales;
+import com.leketo.dynamicreportback.sales.model.SubRow;
+import com.leketo.dynamicreportback.sales.model.salesByCustomer.SalesByCustomer;
+import com.leketo.dynamicreportback.sales.model.salesByCustomer.SubSalesByCustomer;
+import com.leketo.dynamicreportback.sales.repository.SalesRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 
 import java.math.BigDecimal;
-import java.util.Locale;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class NumberFormat {
 
