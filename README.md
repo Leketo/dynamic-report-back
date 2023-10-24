@@ -9,9 +9,19 @@ Descargar `docker`
 Descargar la ultima version de la rama `master` en su PC
 Dentro del proyecto `cd ./dynamic-report-back`
 
+Primero creamos el jar dentro de /build/lib/*
+```
+gradle bootJar
+```
+
 Ejecute el siguiente comando para construir el contenedor:
 ```
 docker build --build-arg JAR_FILE="build/libs/*.jar" -t mhschimpf/dynamic-report-back .
+```
+
+Enviamos al hub de docker
+```
+ docker push mhschimpf/dynamic-report-back
 ```
 
 Ejecute el siguiente comando para ejecutar el contenedor
