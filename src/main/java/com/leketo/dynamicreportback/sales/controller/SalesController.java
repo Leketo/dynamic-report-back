@@ -33,6 +33,8 @@ public class SalesController {
         System.out.println("to:::"+ to);
         return ResponseEntity.ok(salesService.salesBySellerAndFamilySubfamily(from, to));
     }
+
+
     
     @GetMapping("/sales-by-seller-and-customer")
     public ResponseEntity<List<SalesByCustomer>> salesBySellerAndCustomer(

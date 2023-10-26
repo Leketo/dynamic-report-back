@@ -2,8 +2,9 @@ server:
     port : 8081
 spring:
     datasource:
-        url: jdbc:postgresql://181.94.220.137:5433/test
-       # url: jdbc:postgresql://192.168.0.201:5432/libertyaAsu
+       #url: jdbc:postgresql://181.94.220.137:5433/test
+        url: jdbc:postgresql://192.168.0.201:5432/libertyaAsu
+       # url: jdbc:postgresql://190.104.149.135:5432/libertyaAsu
         username: libertya
         password: libertya
         driver-class-name: org.postgresql.Driver
