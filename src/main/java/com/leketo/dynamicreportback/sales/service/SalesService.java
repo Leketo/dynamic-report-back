@@ -211,14 +211,12 @@ public class SalesService {
                     .reduce(BigDecimal.ZERO, BigDecimal::add);
             family.setCostoTotal(NumberFormat.separarMiles(familyCostoTotal));
 
-
-            family.setPercent("0" + " %");
-
             Map<String, List<Sales>> salesBySubFamily = familySales.stream()
                     .collect(Collectors.groupingBy(Sales::getSubFamilia));
 
             List<SubSalesByFamilyBySubFamily> subRows = new ArrayList<>();
             List<Integer> allSubFamilyCounts = new ArrayList<>();
+            List<BigDecimal> allDifference = new ArrayList<>();
 
             // SUB-FAMILIA
             for (Map.Entry<String, List<Sales>> subFamilyEntry : salesBySubFamily.entrySet()) {
@@ -239,12 +237,29 @@ public class SalesService {
                         .reduce(BigDecimal.ZERO, BigDecimal::add);
                 subFamily.setCostoTotal(NumberFormat.separarMiles(costoTotal));
 
+                BigDecimal diferencia = subFamilySubTotal.subtract(costoTotal);
+                subFamily.setDiferencia(NumberFormat.separarMiles(diferencia));
+
                 Integer totalItems = subFamilyEntry.getValue().stream()
                         .mapToInt(Sales::getCantidad)
                         .sum();
                 subFamily.setCantidad(NumberFormat.separarMiles(BigDecimal.valueOf(totalItems)));
+
                 allSubFamilyCounts.add(totalItems);
-                family.setPercent("0" + " %");
+                allDifference.add(diferencia);
+
+                // Calculando el porcentaje de diferencia
+                BigDecimal porcentaje;
+                if (!costoTotal.equals(BigDecimal.ZERO)) { // Evita la división por cero
+                    porcentaje = diferencia.divide(costoTotal, 2, RoundingMode.HALF_UP).multiply(new BigDecimal("100"));
+                } else {
+                    porcentaje = BigDecimal.ZERO;
+                }
+
+                // Redondea al número entero más cercano y concatena el símbolo "%"
+                BigDecimal porcentajeFormateado = porcentaje.setScale(0, RoundingMode.HALF_UP);
+                subFamily.setPercent(NumberFormat.separarMiles(porcentajeFormateado)+ " %");
+
                 subRows.add(subFamily);
             }
 
@@ -258,7 +273,9 @@ public class SalesService {
 
             // Calculando la cantidad total de items para la Familia
             Integer totalItemsFamily = allSubFamilyCounts.stream().mapToInt(Integer::intValue).sum();
+            BigDecimal totalDifference = allDifference.stream().reduce(BigDecimal.ZERO, BigDecimal::add);
             family.setCantidad(NumberFormat.separarMiles(BigDecimal.valueOf(totalItemsFamily)));
+            family.setDiference(NumberFormat.separarMiles(totalDifference));
             family.setSubRows(subRows);
             results.add(family);
         }
@@ -295,13 +312,8 @@ public class SalesService {
                     .reduce(BigDecimal.ZERO, BigDecimal::add);
             salesTargetByClient.subTotal = NumberFormat.separarMiles(subTotal);
 
-            // Aquí asumo que debemos obtener el objetivo de compra de cada cliente.
-            // Puedes cambiar esto si necesitas otro valor.
-
-            // BigDecimal clientTarget = repository.getObjetivoCliente(salesTargetByClient.getName());
-
             BigDecimal clientTarget = entry.getValue().stream()
-                    .map(Sales::getObjetivoDeCompra)
+                    .map(Sales::getObjetivo)
                     .reduce(BigDecimal.ZERO, BigDecimal::add);
             salesTargetByClient.targetClient = NumberFormat.separarMiles(clientTarget);
 

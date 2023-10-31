@@ -11,8 +11,17 @@ public class SalesByFamilyBySubFamily {
     public String subTotal;
     public String costoTotal;
     public String cantidad;
+    public String diference;
     public String percent;
     public List<SubSalesByFamilyBySubFamily> subRows;
+
+    public String getDiference() {
+        return diference;
+    }
+
+    public void setDiference(String diference) {
+        this.diference = diference;
+    }
 
     public int getId() {
         return id;

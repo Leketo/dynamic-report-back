@@ -18,6 +18,7 @@ public class SalesMapper implements RowMapper<Sales> {
                 .cliente(rs.getString("cliente"))
                 .ruc(rs.getString("ruc"))
                 .objetivoDeCompra(rs.getBigDecimal("objetivo_de_compra"))
+                .objetivo(rs.getBigDecimal("objetivo"))
                 .vendedor(rs.getString("vendedor"))
                 .objetivoDelVendedor(rs.getBigDecimal("objetivo_del_vendedor") == null ? BigDecimal.ZERO : rs.getBigDecimal("objetivo_del_vendedor"))
                 .nroFactura(rs.getString("nro_factura"))

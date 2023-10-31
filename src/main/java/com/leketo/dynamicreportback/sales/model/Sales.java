@@ -17,6 +17,7 @@ public class Sales {
     private String cliente;
     private String ruc;
     private BigDecimal objetivoDeCompra;
+    private BigDecimal objetivo;
     private String vendedor;
     private BigDecimal objetivoDelVendedor;
     private String nroFactura;
@@ -78,6 +79,13 @@ public class Sales {
 
     public String getVendedor() {
         return vendedor;
+    }
+
+    public BigDecimal getObjetivo() {
+        return objetivo;
+    }
+    public void setObjetivo(BigDecimal objetivo) {
+        this.objetivo = objetivo;
     }
 
     public void setVendedor(String vendedor) {
