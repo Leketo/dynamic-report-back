@@ -1,6 +1,8 @@
 package com.leketo.dynamicreportback.sales.controller;
 import com.leketo.dynamicreportback.sales.model.Root;
 import com.leketo.dynamicreportback.sales.model.salesByCustomer.SalesByCustomer;
+import com.leketo.dynamicreportback.sales.model.salesByCustomer.SalesByFamilyBySubFamily;
+import com.leketo.dynamicreportback.sales.model.salesByCustomer.SalesTargetByClient;
 import com.leketo.dynamicreportback.sales.service.SalesService;
 import com.leketo.dynamicreportback.util.NumberFormat;
 import lombok.RequiredArgsConstructor;
@@ -54,6 +56,26 @@ public class SalesController {
         System.out.println("from:::"+ from);
         System.out.println("to:::"+ to);
         return ResponseEntity.ok(salesService.salesByFamilyAndCustomer(from, to));
+    }
+
+    @GetMapping("/sales-by-family-by-sub-family")
+    public ResponseEntity<List<SalesByFamilyBySubFamily>> salesByFamilyBySubFamily(
+            @RequestParam("from") @DateTimeFormat(pattern="yyyy-MM-dd") Date from,
+            @RequestParam("to") @DateTimeFormat(pattern="yyyy-MM-dd") Date to
+    ) {
+        System.out.println("from:::"+ from);
+        System.out.println("to:::"+ to);
+        return ResponseEntity.ok(salesService.salesByFamilyBySubFamily(from, to));
+    }
+
+    @GetMapping("/sales-target-by-client")
+    public ResponseEntity<List<SalesTargetByClient>> salesTargetByClient(
+            @RequestParam("from") @DateTimeFormat(pattern="yyyy-MM-dd") Date from,
+            @RequestParam("to") @DateTimeFormat(pattern="yyyy-MM-dd") Date to
+    ) {
+        System.out.println("from:::"+ from);
+        System.out.println("to:::"+ to);
+        return ResponseEntity.ok(salesService.salesTargetByClient(from, to));
     }
 
 
