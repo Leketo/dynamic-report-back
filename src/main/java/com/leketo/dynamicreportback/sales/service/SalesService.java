@@ -211,6 +211,21 @@ public class SalesService {
                     .reduce(BigDecimal.ZERO, BigDecimal::add);
             family.setCostoTotal(NumberFormat.separarMiles(familyCostoTotal));
 
+
+            BigDecimal diferenciaFamily = familySubTotal.subtract(familyCostoTotal);
+
+            // Calculando el porcentaje de diferencia
+            BigDecimal porcentajeFamily;
+            if (!familySubTotal.equals(BigDecimal.ZERO)) { // Evita la división por cero
+                porcentajeFamily = diferenciaFamily.divide(familySubTotal, 2, RoundingMode.HALF_UP).multiply(new BigDecimal("100"));
+            } else {
+                porcentajeFamily = BigDecimal.ZERO;
+            }
+
+            // Redondea al número entero más cercano y concatena el símbolo "%"
+            BigDecimal porcentajeFormateadoFamily = porcentajeFamily.setScale(0, RoundingMode.HALF_UP);
+            family.setPercent(NumberFormat.separarMiles(porcentajeFormateadoFamily)+ " %");
+
             Map<String, List<Sales>> salesBySubFamily = familySales.stream()
                     .collect(Collectors.groupingBy(Sales::getSubFamilia));
 
@@ -250,8 +265,8 @@ public class SalesService {
 
                 // Calculando el porcentaje de diferencia
                 BigDecimal porcentaje;
-                if (!costoTotal.equals(BigDecimal.ZERO)) { // Evita la división por cero
-                    porcentaje = diferencia.divide(costoTotal, 2, RoundingMode.HALF_UP).multiply(new BigDecimal("100"));
+                if (!subFamilySubTotal.equals(BigDecimal.ZERO)) { // Evita la división por cero
+                    porcentaje = diferencia.divide(subFamilySubTotal, 2, RoundingMode.HALF_UP).multiply(new BigDecimal("100"));
                 } else {
                     porcentaje = BigDecimal.ZERO;
                 }
@@ -312,9 +327,10 @@ public class SalesService {
                     .reduce(BigDecimal.ZERO, BigDecimal::add);
             salesTargetByClient.subTotal = NumberFormat.separarMiles(subTotal);
 
-            BigDecimal clientTarget = entry.getValue().stream()
-                    .map(Sales::getObjetivo)
-                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+            Optional<BigDecimal> clientTargetOptional = entry.getValue().stream()
+                    .map(Sales::getObjetivoDeCompra)
+                    .findFirst();
+            BigDecimal clientTarget = clientTargetOptional.orElse(BigDecimal.ZERO);
             salesTargetByClient.targetClient = NumberFormat.separarMiles(clientTarget);
 
             // Calculamos y establecemos el porcentaje
